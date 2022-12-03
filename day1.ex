@@ -1,16 +1,11 @@
-defmodule Day1 do
-  def iterate([a | tail], acc, elfNumbers) do
-    case a do
-      "" -> iterate(tail, 0, [acc | elfNumbers])
-      x -> iterate(tail, acc + String.to_integer(x), elfNumbers)
-    end
-  end
-
-  def iterate([], _, elfNumbers) do
-    elfNumbers
-  end
-end
-
-input = IO.read(:stdio, :all) |> String.split("\n")
-[a, b, c | tail] = Day1.iterate(input, 0, []) |> Enum.sort |> Enum.reverse
-IO.puts(a + b + c)
+IO.read(:stdio, :all)
+|> String.split("\n")
+|> Enum.chunk_by(fn x -> x == "" end)
+|> Enum.filter(fn x -> x != [""] end)
+|> Enum.map(fn x -> Enum.map(x, fn y -> String.to_integer(y) end) end)
+|> Enum.map(fn x -> Enum.sum(x) end)
+|> Enum.sort
+|> Enum.reverse
+|> Enum.take(3)
+|> Enum.sum
+|> IO.puts
