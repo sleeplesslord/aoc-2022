@@ -11,28 +11,26 @@ defmodule Day4 do
 
     MapSet.intersection(firstSet, secondSet)
     |> Enum.empty?()
+    |> Kernel.not()
+  end
+
+  def parse_and_filter(filter_function) do
+    IO.read(:stdio, :all)
+    |> String.split("\n")
+    |> Enum.filter(fn x -> x != "" end)
+    |> Enum.map(&String.split(&1, ["-", ","]))
+    |> Enum.map(fn x -> Enum.map(x, &String.to_integer/1) end)
+    |> Enum.filter(&filter_function.(&1))
+    |> length
+    |> IO.puts()
   end
 
   def part1 do
-    IO.read(:stdio, :all)
-    |> String.split("\n")
-    |> Enum.filter(fn x -> x != "" end)
-    |> Enum.map(&String.split(&1, ["-", ","]))
-    |> Enum.map(fn x -> Enum.map(x, &String.to_integer/1) end)
-    |> Enum.filter(&Day4.pair_subset/1)
-    |> length
-    |> IO.puts()
+    parse_and_filter(&pair_subset/1)
   end
 
   def part2 do
-    IO.read(:stdio, :all)
-    |> String.split("\n")
-    |> Enum.filter(fn x -> x != "" end)
-    |> Enum.map(&String.split(&1, ["-", ","]))
-    |> Enum.map(fn x -> Enum.map(x, &String.to_integer/1) end)
-    |> Enum.filter(fn x -> !Day4.pair_intersect(x) end)
-    |> length
-    |> IO.puts()
+    parse_and_filter(&pair_intersect/1)
   end
 end
 
